@@ -1,0 +1,19 @@
+{
+  "short_name": "Ung bướu Care",
+  "name": "Ung bướu Care – Theo dõi Hóa trị & Xạ trị",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0878d1",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
