@@ -4,120 +4,397 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0878d1">
-<meta name="description" content="Ứng dụng theo dõi bệnh nhân hóa trị và xạ trị">
+<meta name="description" content="Ung bướu Care - Hồ sơ bệnh nhân">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
-<title>Ung bướu Care</title>
+<title>Ung bướu Care – Hồ sơ bệnh nhân</title>
 <style>
-:root{--blue:#0878d1;--cyan:#20a6df;--bg:#f3f7fa;--text:#17324d;--muted:#6d7d89;--line:#e3ebf0;--danger:#c62828;--green:#198754}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-.app{max-width:600px;margin:auto;background:#fff;min-height:100vh}.header{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;padding:20px 17px 18px;border-radius:0 0 22px 22px}.brand{font-size:22px;font-weight:800}.subtitle{font-size:13px;opacity:.92;margin-top:4px}.content{padding:15px 15px 92px}.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;background:#f7fafc;outline:none}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 2px 8px #17324d08}.tile{cursor:pointer;text-align:left}.tile .ico{font-size:25px}.tile b{display:block;margin-top:6px}.muted{font-size:12px;color:var(--muted);margin-top:3px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:13px}.stat{background:#f5f9fc;border-radius:12px;text-align:center;padding:10px 3px}.stat strong{font-size:20px;color:var(--blue);display:block}.stat span{font-size:10px;color:var(--muted)}.section{font-size:17px;font-weight:800;margin:20px 0 9px}.patient{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#dff1ff;color:var(--blue);font-weight:800;flex:none}.pname{font-weight:700;font-size:14px}.pmeta{font-size:11px;color:var(--muted);margin-top:3px}.tag{margin-left:auto;font-size:10px;padding:5px 7px;border-radius:8px;background:#e8f7ee;color:#16834a;white-space:nowrap}.tag.pink{background:#fff0f3;color:#c52d55}.screen{display:none}.screen.active{display:block}.back{border:0;background:transparent;color:var(--blue);font-size:14px;padding:7px 0;cursor:pointer}.box{background:#f5f9fc;border-radius:15px;padding:14px;margin-top:10px}.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #e1eaf0;font-size:14px}.row:last-child{border-bottom:0}.bar{height:9px;background:#e3ebf0;border-radius:20px;overflow:hidden;margin-top:9px}.fill{height:100%;background:var(--cyan)}.btn{width:100%;border:0;border-radius:11px;padding:13px;background:var(--blue);color:white;font-weight:700;font-size:15px;margin-top:12px;cursor:pointer}.btn.secondary{background:#e9f3fa;color:var(--blue)}.danger{background:#fff1f1;color:var(--danger);padding:11px;border-radius:11px;font-size:12px;margin-top:11px}.ok{background:#edf9f2;color:var(--green);padding:11px;border-radius:11px;font-size:12px;margin-top:11px}.input,.select{width:100%;border:1px solid #d7e2e9;border-radius:10px;padding:11px;font-size:15px;background:white}.formrow{margin-top:10px}.formrow label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:600px;width:100%;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:20}.bottom button{border:0;background:transparent;color:#70808b;font-size:10px;cursor:pointer}.bottom button.active{color:var(--blue);font-weight:800}.toast{position:fixed;left:50%;bottom:75px;transform:translateX(-50%);background:#17324d;color:white;padding:10px 14px;border-radius:10px;font-size:13px;display:none;z-index:30}.empty{text-align:center;color:var(--muted);padding:25px}.install{display:none;background:#edf7ff;color:#075d9f;border:1px solid #cfe9fb;border-radius:13px;padding:11px;font-size:12px;margin-top:12px}.install button{float:right;border:0;background:var(--blue);color:white;border-radius:8px;padding:7px 10px}@media(max-width:360px){.stats{grid-template-columns:repeat(2,1fr)}}
+:root{
+ --blue:#0878d1;--cyan:#20a6df;--bg:#f3f7fa;--text:#17324d;--muted:#6d7d89;
+ --line:#dfe8ee;--danger:#c62828;--green:#198754;--orange:#e67e22;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+button,input,select,textarea{font:inherit}
+.app{max-width:650px;margin:auto;background:#fff;min-height:100vh}
+.header{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;padding:20px 17px 18px;border-radius:0 0 22px 22px}
+.brand{font-size:22px;font-weight:800}.subtitle{font-size:13px;opacity:.92;margin-top:4px}
+.content{padding:15px 15px 95px}
+.screen{display:none}.screen.active{display:block}
+.section{font-size:18px;font-weight:800;margin:18px 0 10px}
+.section small{font-size:11px;color:var(--muted);font-weight:500}
+.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;background:#f7fafc;outline:none}
+.search:focus,.input:focus,.select:focus,.textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #0878d11a;outline:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 2px 8px #17324d0a}
+.tile{text-align:left;border:1px solid var(--line);cursor:pointer}
+.tile .ico{font-size:25px}.tile b{display:block;margin-top:5px}.muted{font-size:12px;color:var(--muted);margin-top:3px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.stat{background:#f5f9fc;border-radius:12px;text-align:center;padding:11px 4px}.stat strong{font-size:21px;color:var(--blue);display:block}.stat span{font-size:10px;color:var(--muted)}
+.back{border:0;background:transparent;color:var(--blue);font-size:14px;padding:7px 0;cursor:pointer}
+.btn{width:100%;border:0;border-radius:11px;padding:13px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;margin-top:10px;cursor:pointer}
+.btn.secondary{background:#e9f3fa;color:var(--blue)}.btn.danger{background:#fff0f0;color:var(--danger)}
+.btn.small{width:auto;padding:9px 12px;font-size:13px;margin-top:0}
+.form-card{margin-top:10px}
+.form-section{font-size:14px;font-weight:800;color:var(--blue);padding:4px 0 3px;border-bottom:1px solid var(--line);margin-top:15px}
+.form-section:first-child{margin-top:0}
+.formrow{margin-top:10px}.formrow label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+.input,.select,.textarea{width:100%;border:1px solid #d5e0e7;border-radius:10px;padding:11px;font-size:15px;background:#fff;color:var(--text)}
+.textarea{min-height:80px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.required{color:var(--danger)}
+.hint{font-size:11px;color:var(--muted);margin-top:4px}
+.patient{display:flex;align-items:center;gap:10px;padding:12px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#dff1ff;color:var(--blue);font-weight:800;flex:none}
+.pname{font-weight:750;font-size:14px}.pmeta{font-size:11px;color:var(--muted);margin-top:3px}
+.tag{margin-left:auto;font-size:10px;padding:5px 7px;border-radius:8px;background:#e8f7ee;color:#16834a;white-space:nowrap}
+.tag.blue{background:#eaf5ff;color:#0878d1}.tag.orange{background:#fff3e8;color:#b85c00}
+.empty{text-align:center;color:var(--muted);padding:30px 15px}
+.box{background:#f5f9fc;border-radius:15px;padding:14px;margin-top:10px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #e1eaf0;font-size:13px}
+.row:last-child{border-bottom:0}.row span:first-child{color:var(--muted)}
+.badge{display:inline-block;padding:5px 8px;border-radius:8px;background:#eaf5ff;color:var(--blue);font-size:11px;font-weight:700}
+.profile-head{display:flex;gap:12px;align-items:center}
+.profile-avatar{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#dff1ff;color:var(--blue);font-size:19px;font-weight:800}
+.profile-title{font-size:18px;font-weight:800}.profile-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.action{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left;cursor:pointer}
+.action b{display:block;font-size:13px}.action span{font-size:11px;color:var(--muted)}
+.warning{background:#fff7e8;color:#8a5700;border:1px solid #f2d39c;padding:11px;border-radius:11px;font-size:12px;margin-top:12px}
+.ok{background:#edf9f2;color:var(--green);padding:11px;border-radius:11px;font-size:12px;margin-top:11px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:650px;width:100%;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom));z-index:20}
+.bottom button{border:0;background:transparent;color:#70808b;font-size:10px;cursor:pointer}.bottom button.active{color:var(--blue);font-weight:800}
+.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#17324d;color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;display:none;z-index:30;max-width:90%;text-align:center}
+.install{display:none;background:#edf7ff;color:#075d9f;border:1px solid #cfe9fb;border-radius:13px;padding:11px;font-size:12px;margin-top:12px}
+.install button{float:right;border:0;background:var(--blue);color:#fff;border-radius:8px;padding:7px 10px}
+.toolbar{display:flex;gap:8px;align-items:center;margin-top:10px}.toolbar .search{flex:1}
+@media(max-width:390px){.two,.three{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <div class="app">
-<header class="header"><div class="brand">🏥 Ung bướu Care</div><div class="subtitle">Theo dõi bệnh nhân Hóa trị & Xạ trị</div></header>
+<header class="header">
+ <div class="brand">🏥 Ung bướu Care</div>
+ <div class="subtitle">Bước 1 – Quản lý hồ sơ bệnh nhân</div>
+</header>
+
 <main class="content">
-<div id="install" class="install"><button id="installBtn">Cài đặt</button> Cài ứng dụng lên màn hình điện thoại</div>
+<div id="install" class="install"><button id="installBtn">Cài đặt</button>Cài ứng dụng lên màn hình điện thoại</div>
 
 <section id="home" class="screen active">
-<input id="homeSearch" class="search" placeholder="🔎 Tìm bệnh nhân theo tên hoặc mã">
-<div class="grid">
-<button class="card tile" data-go="patients"><span class="ico">👥</span><b>Bệnh nhân</b><span class="muted">Hồ sơ & tìm kiếm</span></button>
-<button class="card tile" data-go="chemo"><span class="ico">💉</span><b>Hóa trị</b><span class="muted">Chu kỳ & thuốc</span></button>
-<button class="card tile" data-go="radio"><span class="ico">☢️</span><b>Xạ trị</b><span class="muted">Liều & phân liều</span></button>
-<button class="card tile" data-go="tox"><span class="ico">⚠️</span><b>Độc tính</b><span class="muted">Theo dõi CTCAE</span></button>
-</div>
-<div class="stats"><div class="stat"><strong id="nPatients">0</strong><span>Bệnh nhân</span></div><div class="stat"><strong>20</strong><span>Hóa trị</span></div><div class="stat"><strong>20</strong><span>Xạ trị</span></div><div class="stat"><strong id="nAlerts">0</strong><span>Cảnh báo</span></div></div>
-<div class="section">Bệnh nhân gần đây</div><div id="homePatients"></div>
+ <input id="homeSearch" class="search" placeholder="🔎 Tìm theo tên hoặc mã bệnh nhân">
+ <div class="grid">
+  <button class="tile card" data-go="patients"><span class="ico">👥</span><b>Bệnh nhân</b><span class="muted">Hồ sơ, tìm kiếm, chỉnh sửa</span></button>
+  <button class="tile card" data-go="addPatient"><span class="ico">➕</span><b>Thêm bệnh nhân</b><span class="muted">Tạo hồ sơ mới</span></button>
+ </div>
+ <div class="stats">
+  <div class="stat"><strong id="nPatients">0</strong><span>Tổng hồ sơ</span></div>
+  <div class="stat"><strong id="nMale">0</strong><span>Nam</span></div>
+  <div class="stat"><strong id="nFemale">0</strong><span>Nữ</span></div>
+ </div>
+ <div class="section">Bệnh nhân gần đây</div>
+ <div id="homePatients"></div>
+ <div class="warning">⚠️ Đây là phiên bản prototype. Dữ liệu hiện được lưu trên thiết bị bằng localStorage. Không nhập dữ liệu bệnh nhân thật trước khi triển khai hệ thống bảo mật và cơ sở dữ liệu phù hợp.</div>
 </section>
 
 <section id="patients" class="screen">
-<button class="back" data-go="home">‹ Trang chủ</button><div class="section">Danh sách bệnh nhân</div>
-<input id="patientSearch" class="search" placeholder="🔎 Tên hoặc mã bệnh nhân">
-<button class="btn" id="addPatientBtn">＋ Thêm bệnh nhân</button>
-<div id="patientList"></div>
+ <button class="back" data-go="home">‹ Trang chủ</button>
+ <div class="section">Danh sách bệnh nhân <small id="countText"></small></div>
+ <div class="toolbar">
+  <input id="patientSearch" class="search" placeholder="🔎 Tên hoặc mã">
+ </div>
+ <div class="two" style="margin-top:9px">
+  <select id="sexFilter" class="select"><option value="">Tất cả giới</option><option value="Nam">Nam</option><option value="Nữ">Nữ</option></select>
+  <select id="treatmentFilter" class="select"><option value="">Tất cả điều trị</option><option>Hóa trị</option><option>Xạ trị</option><option>Hóa trị + Xạ trị</option><option>Khác</option></select>
+ </div>
+ <button class="btn" id="addPatientBtn">＋ Thêm bệnh nhân</button>
+ <div id="patientList"></div>
 </section>
 
 <section id="addPatient" class="screen">
-<button class="back" data-go="patients">‹ Danh sách bệnh nhân</button><div class="section">Thêm bệnh nhân</div>
-<form id="patientForm" class="card">
-<div class="formrow"><label>Mã bệnh nhân</label><input class="input" id="fId" required placeholder="VD: BN00123"></div>
-<div class="formrow"><label>Họ và tên</label><input class="input" id="fName" required></div>
-<div class="formrow"><label>Tuổi</label><input class="input" id="fAge" type="number" min="0" max="120" required></div>
-<div class="formrow"><label>Giới</label><select class="select" id="fSex"><option>Nữ</option><option>Nam</option></select></div>
-<div class="formrow"><label>Chẩn đoán</label><input class="input" id="fDx" required placeholder="VD: Ung thư vú"></div>
-<div class="formrow"><label>Giai đoạn</label><input class="input" id="fStage" placeholder="VD: II"></div>
-<div class="formrow"><label>Phương pháp điều trị</label><select class="select" id="fTreatment"><option>Hóa trị</option><option>Xạ trị</option><option>Hóa trị + Xạ trị</option></select></div>
-<button class="btn" type="submit">Lưu bệnh nhân</button>
-</form>
+ <button class="back" data-go="patients">‹ Danh sách bệnh nhân</button>
+ <div class="section">Thêm hồ sơ bệnh nhân</div>
+ <form id="patientForm" class="card form-card">
+  <div class="form-section">1. Thông tin định danh</div>
+  <div class="formrow"><label>Mã bệnh nhân <span class="required">*</span></label><input class="input" id="fId" required placeholder="VD: UBK-0001"></div>
+  <div class="two">
+   <div class="formrow"><label>Họ và tên <span class="required">*</span></label><input class="input" id="fName" required placeholder="Nguyễn Văn A"></div>
+   <div class="formrow"><label>Giới tính <span class="required">*</span></label><select class="select" id="fSex"><option value="">Chọn</option><option>Nam</option><option>Nữ</option></select></div>
+  </div>
+  <div class="two">
+   <div class="formrow"><label>Ngày sinh</label><input class="input" id="fDob" type="date"></div>
+   <div class="formrow"><label>Tuổi</label><input class="input" id="fAge" type="number" min="0" max="120" placeholder="VD: 56"></div>
+  </div>
+  <div class="two">
+   <div class="formrow"><label>Số điện thoại</label><input class="input" id="fPhone" type="tel" placeholder="09xxxxxxxx"></div>
+   <div class="formrow"><label>Người liên hệ</label><input class="input" id="fContact" placeholder="Họ tên người nhà"></div>
+  </div>
+  <div class="formrow"><label>Địa chỉ</label><input class="input" id="fAddress" placeholder="Địa chỉ bệnh nhân"></div>
+
+  <div class="form-section">2. Thông tin bệnh học</div>
+  <div class="formrow"><label>Chẩn đoán <span class="required">*</span></label><input class="input" id="fDx" required placeholder="VD: Ung thư vú trái"></div>
+  <div class="two">
+   <div class="formrow"><label>Vị trí ung thư</label><select class="select" id="fSite"><option value="">Chọn</option><option>Vú</option><option>Phổi</option><option>Đầu cổ</option><option>Trực tràng</option><option>Thực quản</option><option>Đại tràng</option><option>Tiền liệt tuyến</option><option>Cổ tử cung</option><option>Não</option><option>Khác</option></select></div>
+   <div class="formrow"><label>Mô bệnh học</label><input class="input" id="fHistology" placeholder="VD: Carcinoma tuyến"></div>
+  </div>
+  <div class="three">
+   <div class="formrow"><label>T</label><input class="input" id="fT" placeholder="T2"></div>
+   <div class="formrow"><label>N</label><input class="input" id="fN" placeholder="N1"></div>
+   <div class="formrow"><label>M</label><input class="input" id="fM" placeholder="M0"></div>
+  </div>
+  <div class="two">
+   <div class="formrow"><label>Giai đoạn</label><select class="select" id="fStage"><option value="">Chưa xác định</option><option>I</option><option>II</option><option>III</option><option>IV</option><option>Khác</option></select></div>
+   <div class="formrow"><label>Ngày chẩn đoán</label><input class="input" id="fDxDate" type="date"></div>
+  </div>
+  <div class="formrow"><label>Bệnh kèm theo</label><textarea class="textarea" id="fComorbidity" placeholder="Tăng huyết áp, đái tháo đường..."></textarea></div>
+
+  <div class="form-section">3. Thông tin điều trị ban đầu</div>
+  <div class="two">
+   <div class="formrow"><label>Phương pháp điều trị</label><select class="select" id="fTreatment"><option value="">Chọn</option><option>Hóa trị</option><option>Xạ trị</option><option>Hóa trị + Xạ trị</option><option>Khác</option></select></div>
+   <div class="formrow"><label>Bác sĩ phụ trách</label><input class="input" id="fDoctor" placeholder="Tên bác sĩ"></div>
+  </div>
+  <div class="two">
+   <div class="formrow"><label>Ngày bắt đầu điều trị</label><input class="input" id="fStartDate" type="date"></div>
+   <div class="formrow"><label>Tình trạng</label><select class="select" id="fStatus"><option>Đang điều trị</option><option>Chưa điều trị</option><option>Đã hoàn thành</option><option>Tạm ngưng</option><option>Mất theo dõi</option></select></div>
+  </div>
+
+  <div class="form-section">4. Xét nghiệm ban đầu</div>
+  <div class="three">
+   <div class="formrow"><label>Hb (g/dL)</label><input class="input" id="fHb" type="number" step="0.1"></div>
+   <div class="formrow"><label>WBC (G/L)</label><input class="input" id="fWbc" type="number" step="0.1"></div>
+   <div class="formrow"><label>ANC (G/L)</label><input class="input" id="fAnc" type="number" step="0.1"></div>
+  </div>
+  <div class="three">
+   <div class="formrow"><label>PLT (G/L)</label><input class="input" id="fPlt" type="number" step="1"></div>
+   <div class="formrow"><label>Creatinine</label><input class="input" id="fCr" type="number" step="0.01"></div>
+   <div class="formrow"><label>AST/ALT</label><input class="input" id="fAstAlt" placeholder="VD: 25/30"></div>
+  </div>
+
+  <div class="form-section">5. Ghi chú</div>
+  <div class="formrow"><label>Ghi chú lâm sàng</label><textarea class="textarea" id="fNotes" placeholder="Thông tin bổ sung..."></textarea></div>
+
+  <button class="btn" type="submit">💾 Lưu hồ sơ bệnh nhân</button>
+  <button class="btn secondary" type="button" id="cancelAdd">Hủy</button>
+ </form>
 </section>
 
 <section id="profile" class="screen">
-<button class="back" data-go="patients">‹ Danh sách bệnh nhân</button><div class="section" id="profileName">Hồ sơ bệnh nhân</div>
-<div class="box"><div class="row"><span>Mã</span><b id="pId"></b></div><div class="row"><span>Tuổi / giới</span><b id="pAgeSex"></b></div><div class="row"><span>Chẩn đoán</span><b id="pDx"></b></div><div class="row"><span>Giai đoạn</span><b id="pStage"></b></div><div class="row"><span>Điều trị</span><b id="pTreatment"></b></div></div>
-<div class="grid"><button class="card tile" data-go="chemo">💉 <b>Hóa trị</b></button><button class="card tile" data-go="radio">☢️ <b>Xạ trị</b></button><button class="card tile" data-go="tox">⚠️ <b>Độc tính</b></button><button class="card tile" data-go="report">📊 <b>Báo cáo</b></button></div>
+ <button class="back" data-go="patients">‹ Danh sách bệnh nhân</button>
+ <div class="profile-head">
+  <div class="profile-avatar" id="profileAvatar">BN</div>
+  <div><div class="profile-title" id="profileName">Hồ sơ bệnh nhân</div><div class="profile-sub" id="profileSub"></div></div>
+ </div>
+
+ <div class="box">
+  <div class="row"><span>Mã bệnh nhân</span><b id="pId"></b></div>
+  <div class="row"><span>Ngày sinh / tuổi</span><b id="pDobAge"></b></div>
+  <div class="row"><span>Giới tính</span><b id="pSex"></b></div>
+  <div class="row"><span>Số điện thoại</span><b id="pPhone"></b></div>
+  <div class="row"><span>Người liên hệ</span><b id="pContact"></b></div>
+  <div class="row"><span>Địa chỉ</span><b id="pAddress"></b></div>
+ </div>
+
+ <div class="section">Thông tin bệnh học</div>
+ <div class="box">
+  <div class="row"><span>Chẩn đoán</span><b id="pDx"></b></div>
+  <div class="row"><span>Vị trí ung thư</span><b id="pSite"></b></div>
+  <div class="row"><span>Mô bệnh học</span><b id="pHistology"></b></div>
+  <div class="row"><span>TNM</span><b id="pTNM"></b></div>
+  <div class="row"><span>Giai đoạn</span><b id="pStage"></b></div>
+  <div class="row"><span>Ngày chẩn đoán</span><b id="pDxDate"></b></div>
+  <div class="row"><span>Bệnh kèm theo</span><b id="pComorbidity"></b></div>
+ </div>
+
+ <div class="section">Điều trị</div>
+ <div class="box">
+  <div class="row"><span>Phương pháp</span><b id="pTreatment"></b></div>
+  <div class="row"><span>Bác sĩ phụ trách</span><b id="pDoctor"></b></div>
+  <div class="row"><span>Ngày bắt đầu</span><b id="pStartDate"></b></div>
+  <div class="row"><span>Tình trạng</span><b id="pStatus"></b></div>
+ </div>
+
+ <div class="section">Xét nghiệm ban đầu</div>
+ <div class="box">
+  <div class="row"><span>Hb</span><b id="pHb"></b></div>
+  <div class="row"><span>WBC</span><b id="pWbc"></b></div>
+  <div class="row"><span>ANC</span><b id="pAnc"></b></div>
+  <div class="row"><span>PLT</span><b id="pPlt"></b></div>
+  <div class="row"><span>Creatinine</span><b id="pCr"></b></div>
+  <div class="row"><span>AST/ALT</span><b id="pAstAlt"></b></div>
+ </div>
+
+ <div class="section">Ghi chú</div>
+ <div class="box" id="pNotes">Chưa có ghi chú</div>
+
+ <div class="action-grid">
+  <button class="action" id="editPatient"><b>✏️ Chỉnh sửa</b><span>Cập nhật hồ sơ</span></button>
+  <button class="action" id="deletePatient"><b>🗑️ Xóa hồ sơ</b><span>Chỉ dùng cho dữ liệu demo</span></button>
+ </div>
+ <div class="warning">🔒 Hồ sơ hiện được lưu cục bộ trên thiết bị. Chưa có đăng nhập, phân quyền, mã hóa máy chủ hoặc sao lưu tập trung.</div>
 </section>
 
 <section id="chemo" class="screen">
-<button class="back" data-go="home">‹ Trang chủ</button><div class="section">Theo dõi hóa trị</div>
-<div class="box"><div class="row"><span>Phác đồ</span><b>ddAC-T</b></div><div class="row"><span>Chu kỳ hiện tại</span><b>3 / 6</b></div><div class="row"><span>Ngày điều trị</span><b>21/09/2026</b></div></div>
-<div class="card" style="margin-top:12px"><div class="row"><span>Chu kỳ 1</span><span>Đã truyền</span></div><div class="row"><span>Chu kỳ 2</span><span>Đã truyền</span></div><div class="row"><span>Chu kỳ 3</span><b style="color:var(--blue)">Hôm nay</b></div><div class="row"><span>Chu kỳ 4–6</span><span>Chưa thực hiện</span></div></div>
-<button class="btn" id="chemoBtn">＋ Ghi nhận chu kỳ</button>
+ <button class="back" data-go="home">‹ Trang chủ</button><div class="section">Hóa trị</div>
+ <div class="box"><div class="row"><span>Trạng thái</span><b>Đang phát triển ở Bước 2</b></div></div>
+ <button class="btn secondary" data-go="profile">← Quay lại hồ sơ</button>
 </section>
 
 <section id="radio" class="screen">
-<button class="back" data-go="home">‹ Trang chủ</button><div class="section">Theo dõi xạ trị</div>
-<div class="box"><div class="row"><span>Vùng xạ</span><b>Đầu cổ</b></div><div class="row"><span>Kỹ thuật</span><b>IMRT</b></div><div class="row"><span>Tổng liều</span><b>70 Gy</b></div><div class="row"><span>Liều / phân liều</span><b>2 Gy</b></div><div class="row"><span>Tiến độ</span><b>15 / 35</b></div><div class="bar"><div class="fill" style="width:43%"></div></div></div>
-<div class="card" style="margin-top:12px"><div class="row"><span>Liều đã nhận</span><b>30 Gy / 70 Gy</b></div><div class="row"><span>Dự kiến kết thúc</span><b>15/10/2026</b></div></div>
-<button class="btn" data-go="tox">Nhập độc tính</button>
+ <button class="back" data-go="home">‹ Trang chủ</button><div class="section">Xạ trị</div>
+ <div class="box"><div class="row"><span>Trạng thái</span><b>Đang phát triển ở Bước 3</b></div></div>
+ <button class="btn secondary" data-go="profile">← Quay lại hồ sơ</button>
 </section>
 
 <section id="tox" class="screen">
-<button class="back" data-go="home">‹ Trang chủ</button><div class="section">Đánh giá độc tính</div>
-<div class="box"><div class="row"><span>Viêm da</span><input class="input tox" data-k="Viêm da" type="number" min="0" max="5" value="2" style="width:70px"></div><div class="row"><span>Viêm niêm mạc</span><input class="input tox" data-k="Viêm niêm mạc" type="number" min="0" max="5" value="1" style="width:70px"></div><div class="row"><span>Buồn nôn</span><input class="input tox" data-k="Buồn nôn" type="number" min="0" max="5" value="1" style="width:70px"></div><div class="row"><span>Tiêu chảy</span><input class="input tox" data-k="Tiêu chảy" type="number" min="0" max="5" value="0" style="width:70px"></div><div class="row"><span>Đau (0–10)</span><input class="input tox" data-k="Đau" type="number" min="0" max="10" value="3" style="width:70px"></div></div>
-<div class="danger">⚠️ Bản PWA này là prototype. Chưa dùng để ra quyết định điều trị.</div><button class="btn" id="saveTox">Lưu đánh giá</button>
+ <button class="back" data-go="home">‹ Trang chủ</button><div class="section">Độc tính</div>
+ <div class="box"><div class="row"><span>Trạng thái</span><b>Đang phát triển ở Bước 4</b></div></div>
+ <button class="btn secondary" data-go="profile">← Quay lại hồ sơ</button>
 </section>
 
 <section id="report" class="screen">
-<button class="back" data-go="home">‹ Trang chủ</button><div class="section">Báo cáo – Thống kê</div>
-<div class="stats"><div class="stat"><strong id="rTotal">0</strong><span>Tổng số</span></div><div class="stat"><strong>20</strong><span>Hóa trị</span></div><div class="stat"><strong>20</strong><span>Xạ trị</span></div><div class="stat"><strong id="rAlerts">0</strong><span>Cảnh báo</span></div></div>
-<div class="box"><b>Phân bố minh họa</b><div class="row"><span>Vú</span><b>28</b></div><div class="row"><span>Phổi</span><b>24</b></div><div class="row"><span>Đầu cổ</span><b>18</b></div><div class="row"><span>Trực tràng</span><b>16</b></div></div>
-<button class="btn secondary" id="exportBtn">Xuất dữ liệu CSV</button>
+ <button class="back" data-go="home">‹ Trang chủ</button><div class="section">Báo cáo</div>
+ <div class="stats"><div class="stat"><strong id="rTotal">0</strong><span>Tổng hồ sơ</span></div><div class="stat"><strong id="rActive">0</strong><span>Đang điều trị</span></div><div class="stat"><strong id="rCompleted">0</strong><span>Hoàn thành</span></div></div>
+ <button class="btn secondary" id="exportBtn">⬇️ Xuất danh sách CSV</button>
 </section>
 </main>
-<nav class="bottom"><button data-go="home">⌂<br>Trang chủ</button><button data-go="patients">👥<br>Bệnh nhân</button><button data-go="chemo">💉<br>Hóa trị</button><button data-go="radio">☢️<br>Xạ trị</button><button data-go="report">▥<br>Báo cáo</button></nav>
+
+<nav class="bottom">
+ <button data-go="home">⌂<br>Trang chủ</button>
+ <button data-go="patients">👥<br>Bệnh nhân</button>
+ <button data-go="addPatient">＋<br>Thêm</button>
+ <button data-go="report">▥<br>Báo cáo</button>
+</nav>
 <div id="toast" class="toast"></div>
 </div>
+
 <script>
-(()=>{const KEY='ungbuou_patients_v1';const defaults=[
-{id:'BN00123',name:'Nguyễn Thị Lan',age:56,sex:'Nữ',dx:'Ung thư vú',stage:'II',treatment:'Hóa trị'},
-{id:'BN00456',name:'Trần Văn Minh',age:62,sex:'Nam',dx:'Ung thư phổi',stage:'III',treatment:'Xạ trị'},
-{id:'BN00789',name:'Lê Thị Hoa',age:48,sex:'Nữ',dx:'Ung thư trực tràng',stage:'III',treatment:'Hóa trị + Xạ trị'},
-{id:'BN01011',name:'Phạm Văn Hùng',age:60,sex:'Nam',dx:'Ung thư đầu cổ',stage:'III',treatment:'Xạ trị'},
-{id:'BN01112',name:'Ngô Thị Mai',age:45,sex:'Nữ',dx:'Ung thư vú',stage:'II',treatment:'Hóa trị'}];
-let patients=JSON.parse(localStorage.getItem(KEY)||'null')||defaults;let deferred=null;const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+(()=>{
+const KEY='ungbuou_patients_v2';
+const demo=[
+ {id:'UBK-0001',name:'Nguyễn Thị Lan',sex:'Nữ',dob:'1970-05-12',age:56,phone:'',contact:'',address:'Nha Trang, Khánh Hòa',dx:'Ung thư vú trái',site:'Vú',histology:'Carcinoma tuyến',t:'T2',n:'N1',m:'M0',stage:'II',dxDate:'2026-06-10',comorbidity:'Tăng huyết áp',treatment:'Hóa trị + Xạ trị',doctor:'',startDate:'2026-07-01',status:'Đang điều trị',hb:'11.8',wbc:'6.2',anc:'3.8',plt:'245',cr:'0.8',astalt:'25/28',notes:'Dữ liệu minh họa'},
+ {id:'UBK-0002',name:'Trần Văn Minh',sex:'Nam',dob:'1964-02-20',age:62,phone:'',contact:'',address:'Khánh Hòa',dx:'Ung thư phổi',site:'Phổi',histology:'Carcinoma tuyến',t:'T3',n:'2',m:'0',stage:'III',dxDate:'2026-05-14',comorbidity:'Không ghi nhận',treatment:'Xạ trị',doctor:'',startDate:'2026-08-01',status:'Đang điều trị',hb:'12.6',wbc:'7.1',anc:'4.1',plt:'220',cr:'0.9',astalt:'22/24',notes:''}
+];
+let patients=JSON.parse(localStorage.getItem(KEY)||'null');
+if(!Array.isArray(patients)){patients=demo;localStorage.setItem(KEY,JSON.stringify(patients))}
+let currentId=null, editing=false, deferred=null;
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const val=id=>$(id).value.trim();
 function save(){localStorage.setItem(KEY,JSON.stringify(patients))}
-function toast(t){$('#toast').textContent=t;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',2200)}
-function initials(n){return n.split(' ').slice(-2).map(x=>x[0]).join('')}
-function row(p){return `<div class="patient" data-id="${p.id}"><div class="avatar">${initials(p.name)}</div><div><div class="pname">${p.name}</div><div class="pmeta">${p.id} · ${p.age} tuổi · ${p.sex}</div></div><span class="tag ${p.treatment.includes('Hóa')?'pink':''}">${p.treatment}</span></div>`}
-function render(q=''){const a=patients.filter(p=>(p.name+p.id).toLowerCase().includes(q.toLowerCase()));$('#patientList').innerHTML=a.length?a.map(row).join(''):'<div class="empty">Không tìm thấy bệnh nhân</div>';$('#homePatients').innerHTML=patients.slice(0,4).map(row).join('');$('#nPatients').textContent=patients.length;$('#rTotal').textContent=patients.length;$('#nAlerts').textContent=3;$('#rAlerts').textContent=3}
-function go(id){$$('.screen').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo(0,0);$$('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.go===id))}
-function profile(p){$('#profileName').textContent=p.name;$('#pId').textContent=p.id;$('#pAgeSex').textContent=`${p.age} tuổi · ${p.sex}`;$('#pDx').textContent=p.dx;$('#pStage').textContent=p.stage||'Chưa nhập';$('#pTreatment').textContent=p.treatment;go('profile')}
-document.addEventListener('click',e=>{const nav=e.target.closest('[data-go]');if(nav)go(nav.dataset.go);const pat=e.target.closest('.patient');if(pat){const p=patients.find(x=>x.id===pat.dataset.id);if(p)profile(p)}});
+function toast(t){$('#toast').textContent=t;$('#toast').style.display='block';clearTimeout(window.__toast);window.__toast=setTimeout(()=>$('#toast').style.display='none',2300)}
+function initials(n){return (n||'BN').split(/\s+/).slice(-2).map(x=>x[0]||'').join('').toUpperCase()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function fmtDate(v){if(!v)return '—';const p=v.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:v}
+function row(p){
+ const tag=p.treatment||'Chưa chọn';
+ const cls=tag.includes('Xạ')?'blue':tag.includes('Hóa')?'orange':'';
+ return `<div class="patient" data-id="${esc(p.id)}">
+  <div class="avatar">${esc(initials(p.name))}</div>
+  <div style="min-width:0"><div class="pname">${esc(p.name)}</div><div class="pmeta">${esc(p.id)} · ${esc(p.age||'—')} tuổi · ${esc(p.sex||'—')}</div></div>
+  <span class="tag ${cls}">${esc(tag)}</span>
+ </div>`;
+}
+function render(q=''){
+ const sex=$('#sexFilter')?.value||'', treatment=$('#treatmentFilter')?.value||'';
+ const arr=patients.filter(p=>(p.name+' '+p.id+' '+(p.dx||'')).toLowerCase().includes(q.toLowerCase()))
+  .filter(p=>!sex||p.sex===sex).filter(p=>!treatment||p.treatment===treatment);
+ $('#patientList').innerHTML=arr.length?arr.map(row).join(''):'<div class="empty">Không tìm thấy bệnh nhân</div>';
+ $('#countText').textContent=`(${arr.length}/${patients.length})`;
+ $('#homePatients').innerHTML=patients.slice(0,5).map(row).join('')||'<div class="empty">Chưa có hồ sơ</div>';
+ const male=patients.filter(p=>p.sex==='Nam').length,female=patients.filter(p=>p.sex==='Nữ').length;
+ $('#nPatients').textContent=patients.length;$('#nMale').textContent=male;$('#nFemale').textContent=female;
+ $('#rTotal').textContent=patients.length;$('#rActive').textContent=patients.filter(p=>p.status==='Đang điều trị').length;$('#rCompleted').textContent=patients.filter(p=>p.status==='Đã hoàn thành').length;
+}
+function go(id){
+ $$('.screen').forEach(x=>x.classList.remove('active'));$('#'+id).classList.add('active');
+ $$('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.go===id));
+ window.scrollTo(0,0);
+}
+function resetForm(){
+ $('#patientForm').reset(); editing=false; currentId=null;
+ $('#fStatus').value='Đang điều trị';
+}
+function fillForm(p){
+ const map={fId:'id',fName:'name',fSex:'sex',fDob:'dob',fAge:'age',fPhone:'phone',fContact:'contact',fAddress:'address',
+ fDx:'dx',fSite:'site',fHistology:'histology',fT:'t',fN:'n',fM:'m',fStage:'stage',fDxDate:'dxDate',fComorbidity:'comorbidity',
+ fTreatment:'treatment',fDoctor:'doctor',fStartDate:'startDate',fStatus:'status',fHb:'hb',fWbc:'wbc',fAnc:'anc',fPlt:'plt',fCr:'cr',fAstAlt:'astalt',fNotes:'notes'};
+ Object.entries(map).forEach(([id,k])=>$('#'+id).value=p[k]??'');
+}
+function profile(p){
+ currentId=p.id;
+ $('#profileAvatar').textContent=initials(p.name);
+ $('#profileName').textContent=p.name||'Hồ sơ bệnh nhân';
+ $('#profileSub').textContent=`${p.id} · ${p.status||'Chưa xác định'}`;
+ const set=(id,v)=>$(id).textContent=v||'—';
+ set('#pId',p.id);set('#pDobAge',`${fmtDate(p.dob)} · ${p.age||'—'} tuổi`);set('#pSex',p.sex);set('#pPhone',p.phone);set('#pContact',p.contact);set('#pAddress',p.address);
+ set('#pDx',p.dx);set('#pSite',p.site);set('#pHistology',p.histology);set('#pTNM',[p.t,p.n,p.m].some(Boolean)?`T${p.t||'—'} N${p.n||'—'} M${p.m||'—'}`:'—');set('#pStage',p.stage);set('#pDxDate',fmtDate(p.dxDate));set('#pComorbidity',p.comorbidity);
+ set('#pTreatment',p.treatment);set('#pDoctor',p.doctor);set('#pStartDate',fmtDate(p.startDate));set('#pStatus',p.status);
+ set('#pHb',p.hb?p.hb+' g/dL':'—');set('#pWbc',p.wbc?p.wbc+' G/L':'—');set('#pAnc',p.anc?p.anc+' G/L':'—');set('#pPlt',p.plt?p.plt+' G/L':'—');set('#pCr',p.cr);set('#pAstAlt',p.astalt);
+ $('#pNotes').textContent=p.notes||'Chưa có ghi chú';
+ go('profile');
+}
+function readForm(){
+ return {
+  id:val('#fId'),name:val('#fName'),sex:val('#fSex'),dob:val('#fDob'),age:Number(val('#fAge'))||0,
+  phone:val('#fPhone'),contact:val('#fContact'),address:val('#fAddress'),dx:val('#fDx'),site:val('#fSite'),
+  histology:val('#fHistology'),t:val('#fT'),n:val('#fN'),m:val('#fM'),stage:val('#fStage'),dxDate:val('#fDxDate'),
+  comorbidity:val('#fComorbidity'),treatment:val('#fTreatment'),doctor:val('#fDoctor'),startDate:val('#fStartDate'),
+  status:val('#fStatus'),hb:val('#fHb'),wbc:val('#fWbc'),anc:val('#fAnc'),plt:val('#fPlt'),cr:val('#fCr'),
+  astalt:val('#fAstAlt'),notes:val('#fNotes')
+ };
+}
+document.addEventListener('click',e=>{
+ const nav=e.target.closest('[data-go]');if(nav){if(nav.dataset.go==='addPatient')resetForm();go(nav.dataset.go);return}
+ const pat=e.target.closest('.patient');if(pat){const p=patients.find(x=>x.id===pat.dataset.id);if(p)profile(p)}
+});
 $('#homeSearch').addEventListener('input',e=>{go('patients');$('#patientSearch').value=e.target.value;render(e.target.value)});
 $('#patientSearch').addEventListener('input',e=>render(e.target.value));
-$('#addPatientBtn').addEventListener('click',()=>go('addPatient'));
-$('#patientForm').addEventListener('submit',e=>{e.preventDefault();const p={id:$('#fId').value.trim(),name:$('#fName').value.trim(),age:Number($('#fAge').value),sex:$('#fSex').value,dx:$('#fDx').value.trim(),stage:$('#fStage').value.trim(),treatment:$('#fTreatment').value};if(!p.id||!p.name||!Number.isFinite(p.age)||p.age<0||p.age>120||!p.dx){toast('Vui lòng kiểm tra thông tin');return}if(patients.some(x=>x.id===p.id)){toast('Mã bệnh nhân đã tồn tại');return}patients.unshift(p);save();e.target.reset();render();go('patients');toast('Đã thêm bệnh nhân')});
-$('#saveTox').addEventListener('click',()=>{localStorage.setItem('ungbuou_last_tox',new Date().toISOString());toast('Đã lưu đánh giá trên thiết bị')});
-$('#chemoBtn').addEventListener('click',()=>toast('Đã ghi nhận chu kỳ (demo)'));
-$('#exportBtn').addEventListener('click',()=>{const head='MaBN,HoTen,Tuoi,Gioi,ChanDoan,GiaiDoan,DDieuTri\\n';const body=patients.map(p=>[p.id,p.name,p.age,p.sex,p.dx,p.stage,p.treatment].map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\\n');const blob=new Blob(['\\ufeff'+head+body],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='benh_nhan_ung_buou.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+$('#sexFilter').addEventListener('change',()=>render($('#patientSearch').value));
+$('#treatmentFilter').addEventListener('change',()=>render($('#patientSearch').value));
+$('#addPatientBtn').addEventListener('click',()=>{resetForm();go('addPatient')});
+$('#cancelAdd').addEventListener('click',()=>go('patients'));
+
+$('#patientForm').addEventListener('submit',e=>{
+ e.preventDefault();const p=readForm();
+ if(!p.id||!p.name||!p.sex||!p.dx){toast('Vui lòng nhập các trường bắt buộc (*)');return}
+ if(!p.age && p.dob){const d=new Date(p.dob),now=new Date();p.age=Math.max(0,now.getFullYear()-d.getFullYear()-((now.getMonth()<d.getMonth()||now.getMonth()===d.getMonth()&&now.getDate()<d.getDate())?1:0))}
+ if(!p.age){toast('Vui lòng nhập tuổi hoặc ngày sinh');return}
+ if(editing){
+  const idx=patients.findIndex(x=>x.id===currentId);
+  if(idx<0){toast('Không tìm thấy hồ sơ');return}
+  if(p.id!==currentId && patients.some(x=>x.id===p.id)){toast('Mã bệnh nhân đã tồn tại');return}
+  patients[idx]=p;currentId=p.id;toast('Đã cập nhật hồ sơ');
+ }else{
+  if(patients.some(x=>x.id===p.id)){toast('Mã bệnh nhân đã tồn tại');return}
+  patients.unshift(p);currentId=p.id;toast('Đã thêm hồ sơ bệnh nhân');
+ }
+ save();render();const saved=patients.find(x=>x.id===currentId);if(saved)profile(saved);
+});
+
+$('#editPatient').addEventListener('click',()=>{
+ const p=patients.find(x=>x.id===currentId);if(!p)return;
+ editing=true;currentId=p.id;fillForm(p);go('addPatient');window.scrollTo(0,0);
+});
+$('#deletePatient').addEventListener('click',()=>{
+ if(!currentId)return;
+ const p=patients.find(x=>x.id===currentId);
+ if(!p)return;
+ if(confirm(`Xóa hồ sơ demo của ${p.name}?`)){
+  patients=patients.filter(x=>x.id!==currentId);save();currentId=null;render();go('patients');toast('Đã xóa hồ sơ');
+ }
+});
+$('#exportBtn').addEventListener('click',()=>{
+ const headers=['MaBN','HoTen','Gioi','NgaySinh','Tuoi','DienThoai','DiaChi','ChanDoan','ViTriUngThu','MoBenhHoc','T','N','M','GiaiDoan','NgayChanDoan','BenhKemTheo','DieuTri','BacSi','NgayBatDau','TinhTrang','Hb','WBC','ANC','PLT','Creatinine','AST_ALT','GhiChu'];
+ const keys=['id','name','sex','dob','age','phone','address','dx','site','histology','t','n','m','stage','dxDate','comorbidity','treatment','doctor','startDate','status','hb','wbc','anc','plt','cr','astalt','notes'];
+ const csv=[headers.join(','),...patients.map(p=>keys.map(k=>`"${String(p[k]??'').replaceAll('"','""')}"`).join(','))].join('\n');
+ const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ho_so_benh_nhan_ung_buou.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;$('#install').style.display='block'});
-$('#installBtn').addEventListener('click',async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;$('#install').style.display='none'}});
+$('#installBtn').addEventListener('click',async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;$('#install').style.display='none'});
 window.addEventListener('appinstalled',()=>{$('#install').style.display='none';toast('Đã cài ứng dụng')});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 render();
 })();
 </script>
-</body></html>
+</body>
+</html>
